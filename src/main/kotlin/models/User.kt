@@ -25,19 +25,19 @@ data class User(val id: Int,
                 val email = param["email"]
                 val password = param["password"]
 
-                if (email.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_EMAIL).run { maxScore-- }
-                if (password.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { maxScore-- }
+                if (email.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_EMAIL).run { scoreFlag-- }
+                if (password.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { scoreFlag-- }
 
-                if (maxScore <= 0) return errors
+                if (maxScore < maxScore) return errors
 
                 // even if above is very defensive,
                 // we should let the compiler handle null cases
                 // just in case :)
                 this.user = email?.let { UserSource.getUserByEmail(it) }
 
-                if (user == null) errors.add(RequestError.AUTH_INVALID_CREDENTIALS).run { maxScore-- }
+                if (user == null) errors.add(RequestError.AUTH_INVALID_CREDENTIALS).run { scoreFlag-- }
 
-                if (maxScore == 2) {
+                if (maxScore == maxScore) {
                     val correctPassword = BCrypt.checkpw(password, user?.hashedPassword)
                     if (!correctPassword) errors.add(RequestError.AUTH_INVALID_CREDENTIALS)
                 }
@@ -53,18 +53,18 @@ data class User(val id: Int,
                 val password = param["password"]
                 val cfmPassword = param["password2"]
 
-                if (email.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_EMAIL).run { maxScore-- }
-                if (password.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { maxScore-- }
-                if (cfmPassword.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { maxScore-- }
-                if (password != cfmPassword) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { maxScore-- }
+                if (email.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_EMAIL).run { scoreFlag-- }
+                if (password.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { scoreFlag-- }
+                if (cfmPassword.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { scoreFlag-- }
+                if (password != cfmPassword) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { scoreFlag-- }
 
-                if (maxScore < 5) return errors
+                if (scoreFlag < maxScore) return errors
 
                 val hashedPassword = BCrypt.hashpw(cfmPassword, BCrypt.gensalt())
 
-                if (maxScore == 5) {
+                if (scoreFlag == maxScore) {
                     val id = email?.let { UserSource.insertUser(it, hashedPassword) }
-                    if (id == null) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { maxScore-- }
+                    if (id == null) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { scoreFlag-- }
                 }
 
                 return errors
