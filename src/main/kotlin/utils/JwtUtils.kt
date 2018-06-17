@@ -42,6 +42,6 @@ fun PipelineContext<Unit, ApplicationCall>.jwtAuth() {
 
 suspend fun PipelineContext<*, ApplicationCall>.requireLogin(): User {
     val user = call.attributes[User.key]
-    requireNotNull(user) { call.respond(HttpStatusCode.Unauthorized, "User not logged in!") }
+    requireNotNull(user) { call.respond(HttpStatusCode.Unauthorized, "user not logged in!") }
     return user
 }

@@ -4,7 +4,7 @@ import config.serverConfig
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.routing.Routing
 import io.ktor.routing.route
-import routes.User.auth
+import routes.user.auth
 import utils.jwtAuth
 
 fun Routing.setRouter() = route(serverConfig.apiPath) {

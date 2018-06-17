@@ -2,7 +2,7 @@ package config.database
 
 import org.jetbrains.exposed.sql.Table
 
-object _User : Table("User") {
+object _User : Table("user") {
     val id = integer("id").autoIncrement().primaryKey()
     val email = varchar("email", 255).uniqueIndex()
     val hashedPassword = varchar("hashedPassword", 60)

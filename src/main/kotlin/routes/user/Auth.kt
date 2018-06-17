@@ -1,6 +1,7 @@
-package routes.User
+package routes.user
 
 import io.ktor.application.call
+import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveParameters
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -24,5 +25,14 @@ fun Route.auth() = route("/auth") {
         user?.let(JwtUtils::makeToken)?.run { call.respond(UserJwtPair(this, user.strippedUser)) }
     }
 
+    post("/register") {
+        val params = call.receiveParameters()
+        val validator = User.UserAuth.Register(params)
+        val listOfErrors = validator.validateRequest()
+
+        if (listOfErrors.isNotEmpty()) call.badRequest(listOfErrors)
+        call.respond(HttpStatusCode.Created,
+                "Your account has been created")
+    }
 
 }
