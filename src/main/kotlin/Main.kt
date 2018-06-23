@@ -1,6 +1,4 @@
-import config.database.DatabaseConfig
-import config.database.PostT
-import config.database.UserT
+import config.database.*
 import config.serverConfig
 import io.ktor.application.call
 import io.ktor.application.install
@@ -28,7 +26,7 @@ private fun startServer() =
             /* Create database tables */
             DatabaseConfig()
             transaction {
-                create(UserT, PostT)
+                create(UserT, LocationT, PostT, PostSubT, LocationSubT, CommentT, ImageT)
             }
 
             install(CORS) {
@@ -41,7 +39,7 @@ private fun startServer() =
             install(StatusPages) {
                 exception<IllegalStateException> {
                     if (it.message == "No instance for key AttributeKey: user")
-                        call.respond(HttpStatusCode.Unauthorized, "Missing JWT")
+                        call.respond(HttpStatusCode.Unauthorized, "Missing JWT >:(")
                 }
             }
 
