@@ -62,6 +62,7 @@ object ImageT : Table("Image") {
     val id = integer("id").autoIncrement().primaryKey()
     val userId = intId("userId") references UserT.id
     val postId = intId("postId") references PostT.id
+    val fileName = varchar("fileName", 255)
     val createdAt = createdAt()
     val updatedAt = updatedAt()
 }
