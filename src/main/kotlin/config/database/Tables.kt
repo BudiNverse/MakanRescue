@@ -14,6 +14,7 @@ object UserT : Table("User") {
     val id = intId().autoIncrement().primaryKey()
     val email = varchar("email", 255).uniqueIndex()
     val hashedPassword = varchar("hashedPassword", 60)
+    val isVerified = bool("isVerified").default(false)
 }
 
 object PostT : Table("Post") {
