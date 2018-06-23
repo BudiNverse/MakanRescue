@@ -53,7 +53,7 @@ class Post(val id: Int = 0,
     class PostOperations {
 
         class GetPostById(private val param: Parameters) : RequestValidator(maxScore = 1) {
-            var post: List<Post> = listOf()
+            var post: Post? = null
 
             override fun validateRequest(): ArrayList<RequestError> {
                 val id = param["id"]?.toIntOrNull()

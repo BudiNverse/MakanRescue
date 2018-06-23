@@ -21,8 +21,7 @@ fun Route.post() = route("/post") {
         val errors = validator.validateRequest()
 
         if (errors.isNotEmpty()) call.badRequest(errors)
-
-        call.respond(validator.post)
+        validator.post?.let { call.respond(it) }
 
     }
 
