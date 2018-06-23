@@ -1,6 +1,7 @@
 package utils
 
 import io.ktor.application.ApplicationCall
+import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.pipeline.PipelineContext
 import io.ktor.response.respond
@@ -11,14 +12,17 @@ import models.User
 suspend fun ApplicationCall.badRequest(data: Any) =
         this.respond(HttpStatusCode.BadRequest, data)
 
-class UserAppCtx(val user: User, val appCtx: PipelineContext<Unit, ApplicationCall>)
+class UserAppCtx(val user: User, val appCtx: PipelineContext<Unit, ApplicationCall>) {
+    val call
+        get() = appCtx.call
+}
 
 fun Route.getAuth(block: UserAppCtx.() -> Unit) =
         get {
             UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.getAuth(route: String, block: UserAppCtx.() -> Unit) =
+fun Route.getAuth(route: String, block: suspend UserAppCtx.() -> Unit) =
         get(route) {
             UserAppCtx(requireLogin(), this).block()
         }

@@ -22,4 +22,11 @@ object PostSource {
         }.map(::Post)
     }
 
+    fun getUserPost(userId: Int) = transaction {
+        PostT.select {
+            (PostT.expiry greater System.currentTimeMillis()) and
+                    (PostT.foodAvail neq 3) and (PostT.userId eq userId)
+        }.map(::Post)
+    }
+
 }

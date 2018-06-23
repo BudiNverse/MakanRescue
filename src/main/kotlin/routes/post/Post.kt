@@ -28,7 +28,8 @@ fun Route.post() = route("/post") {
     }
 
     getAuth("/myPosts") {
-        TODO()
+        val posts = PostSource.getUserPost(user.id)
+        call.respond(posts)
     }
 
     postAuth {
