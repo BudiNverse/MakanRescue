@@ -11,44 +11,44 @@ import models.User
 suspend fun ApplicationCall.badRequest(data: Any) =
         this.respond(HttpStatusCode.BadRequest, data)
 
-class CustomerAppCtx(val user: User, val appCtx: PipelineContext<Unit, ApplicationCall>)
+class UserAppCtx(val user: User, val appCtx: PipelineContext<Unit, ApplicationCall>)
 
-fun Route.getAuth(block: CustomerAppCtx.() -> Unit) =
+fun Route.getAuth(block: UserAppCtx.() -> Unit) =
         get {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.getAuth(route: String, block: CustomerAppCtx.() -> Unit) =
+fun Route.getAuth(route: String, block: UserAppCtx.() -> Unit) =
         get(route) {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.postAuth(block: CustomerAppCtx.() -> Unit) =
+fun Route.postAuth(block: UserAppCtx.() -> Unit) =
         post {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.postAuth(route: String, block: CustomerAppCtx.() -> Unit) =
+fun Route.postAuth(route: String, block: UserAppCtx.() -> Unit) =
         post(route) {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.putAuth(block: CustomerAppCtx.() -> Unit) =
+fun Route.putAuth(block: UserAppCtx.() -> Unit) =
         put {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.putAuth(route: String, block: CustomerAppCtx.() -> Unit) =
+fun Route.putAuth(route: String, block: UserAppCtx.() -> Unit) =
         put(route) {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.deleteAuth(block: CustomerAppCtx.() -> Unit) =
+fun Route.deleteAuth(block: UserAppCtx.() -> Unit) =
         delete {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
 
-fun Route.deleteAuth(route: String, block: CustomerAppCtx.() -> Unit) =
+fun Route.deleteAuth(route: String, block: UserAppCtx.() -> Unit) =
         delete(route) {
-            CustomerAppCtx(requireLogin(), this).block()
+            UserAppCtx(requireLogin(), this).block()
         }
