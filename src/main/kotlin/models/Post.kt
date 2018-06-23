@@ -53,16 +53,16 @@ class Post(val id: Int = 0,
     class PostOperations {
 
         class GetPostById(private val param: Parameters) : RequestValidator(maxScore = 1) {
-            var post: List<Post>? = null
+            var post: List<Post> = listOf()
 
             override fun validateRequest(): ArrayList<RequestError> {
-                val id = param["id"]?.toInt()
+                val id = param["id"]?.toIntOrNull()
 
                 // prelim evaluation
                 if (id == null) errors.add(RequestError.POST_MISSING_ID).run { scoreFlag-- }
 
                 if (scoreFlag < maxScore) return errors
-                post = id?.let(PostSource::getPostById)
+                post = PostSource.getPostById(id!!)
 
                 return errors
             }
