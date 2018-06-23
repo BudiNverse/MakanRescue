@@ -37,10 +37,27 @@ enum class RequestError(val errorCode: Int,
             "Your passwords does not match"
     ),
     AUTH_INVALID_ACCOUNT_REGISTRATION(
-            105,
+            106,
             ErrorType.INVALID_USER,
             "Error creating user"
     )
+    // </editor-fold>
+
+    // 201 - 300
+    // <editor-fold desc="/post">
+    // </editor-fold>
+
+    // 301 - 400
+    // <editor-fold desc="/comment">
+    // </editor-fold>
+
+    //401 - 500
+    // <editor-fold desc="/postSub">
+    // </editor-fold>
+
+    //501 - 600
+    // <editor-fold desc="/locationSub">
+    // </editor-fold>
 }
 
 enum class ErrorType {
