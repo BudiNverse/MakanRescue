@@ -1,6 +1,6 @@
 package models
 
-import config.database._User
+import config.database.UserT
 import io.ktor.http.Parameters
 import io.ktor.util.AttributeKey
 import org.jetbrains.exposed.sql.ResultRow
@@ -64,7 +64,7 @@ data class User(val id: Int,
 
                 if (scoreFlag == maxScore) {
                     val id = email?.let { UserSource.insertUser(it, hashedPassword) }
-                    if (id == null) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { scoreFlag-- }
+                    if (id == null) errors.add(RequestError.AUTH_INVALID_ACCOUNT_REGISTRATION).run { scoreFlag-- }
                 }
 
                 return errors
@@ -74,9 +74,9 @@ data class User(val id: Int,
     }
 
     constructor(resultRow: ResultRow) : this(
-            id = resultRow[_User.id],
-            email = resultRow[_User.email],
-            hashedPassword = resultRow[_User.hashedPassword]
+            id = resultRow[UserT.id],
+            email = resultRow[UserT.email],
+            hashedPassword = resultRow[UserT.hashedPassword]
     )
 
     companion object {

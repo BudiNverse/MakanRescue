@@ -37,7 +37,7 @@ enum class RequestError(val errorCode: Int,
             "Your passwords does not match"
     ),
     AUTH_INVALID_ACCOUNT_REGISTRATION(
-            106,
+            105,
             ErrorType.INVALID_USER,
             "Error creating user"
     )

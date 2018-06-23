@@ -1,5 +1,6 @@
 import config.database.DatabaseConfig
-import config.database._User
+import config.database.PostT
+import config.database.UserT
 import config.serverConfig
 import io.ktor.application.call
 import io.ktor.application.install
@@ -19,7 +20,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import server.setRouter
 
 fun main(args: Array<String>) {
-    startServer()
+    //startServer()
 }
 
 private fun startServer() =
@@ -27,7 +28,7 @@ private fun startServer() =
             /* Create database tables */
             DatabaseConfig()
             transaction {
-                create(_User)
+                create(UserT, PostT)
             }
 
             install(CORS) {
