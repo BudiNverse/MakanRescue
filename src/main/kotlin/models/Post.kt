@@ -5,6 +5,7 @@ import io.ktor.http.Parameters
 import org.jetbrains.exposed.sql.ResultRow
 import persistence.ImageSource
 import persistence.LocationSource
+import persistence.PostSource
 
 class Post(val id: Int = 0,
            val locationId: Int = 0,
@@ -50,10 +51,28 @@ class Post(val id: Int = 0,
 
 
     class PostOperations {
+
+        class GetPostById(private val param: Parameters) : RequestValidator(maxScore = 1) {
+            var post: List<Post>? = null
+
+            override fun validateRequest(): ArrayList<RequestError> {
+                val id = param["id"]?.toInt()
+
+                // prelim evaluation
+                if (id == null) errors.add(RequestError.POST_MISSING_ID).run { scoreFlag-- }
+
+                if (scoreFlag < maxScore) return errors
+                post = id?.let(PostSource::getPostById)
+
+                return errors
+            }
+
+        }
+
         class CreatePost(private val param: Parameters) : RequestValidator(maxScore = 5) {
             override fun validateRequest(): ArrayList<RequestError> {
 
-                if (maxScore < maxScore) return errors
+                if (scoreFlag < maxScore) return errors
 
                 return errors
             }
@@ -61,7 +80,7 @@ class Post(val id: Int = 0,
 
         class UpdatePost(private val param: Parameters) : RequestValidator(maxScore = 5) {
             override fun validateRequest(): ArrayList<RequestError> {
-                if (maxScore < maxScore) return errors
+                if (scoreFlag < maxScore) return errors
 
                 return errors
             }

@@ -40,11 +40,15 @@ enum class RequestError(val errorCode: Int,
             106,
             ErrorType.INVALID_USER,
             "Error creating user"
-    )
+    ),
     // </editor-fold>
 
     // 201 - 300
     // <editor-fold desc="/post">
+    POST_MISSING_ID(
+            201,
+            ErrorType.BAD_FORM_VALUE,
+            "Missing id")
     // </editor-fold>
 
     // 301 - 400
