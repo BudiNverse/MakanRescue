@@ -9,13 +9,15 @@ import persistence.UserSource
 
 data class User(val id: Int,
                 val email: String,
-                val hashedPassword: String) {
+                val hashedPassword: String,
+                val isVerified: Boolean) {
 
     val strippedUser
-        get() = StrippedUser(id, email)
+        get() = StrippedUser(id, email, isVerified)
 
     inner class StrippedUser(val id: Int,
-                             val email: String)
+                             val email: String,
+                             val isVerified: Boolean)
 
     class UserAuth {
         class Login(private val param: Parameters) : RequestValidator(maxScore = 2) {
@@ -28,12 +30,10 @@ data class User(val id: Int,
                 if (email.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_EMAIL).run { scoreFlag-- }
                 if (password.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { scoreFlag-- }
 
+                // prelim evaluation
                 if (maxScore < maxScore) return errors
 
-                // even if above is very defensive,
-                // we should let the compiler handle null cases
-                // just in case :)
-                this.user = email?.let { UserSource.getUserByEmail(it) }
+                this.user = email?.let(UserSource::getUserByEmail)
 
                 if (user == null) errors.add(RequestError.AUTH_INVALID_CREDENTIALS).run { scoreFlag-- }
 
@@ -58,6 +58,7 @@ data class User(val id: Int,
                 if (cfmPassword.isNullOrBlank()) errors.add(RequestError.AUTH_MISSING_PASSWORD).run { scoreFlag-- }
                 if (password != cfmPassword) errors.add(RequestError.AUTH_PASSWORD_NOT_THE_SAME).run { scoreFlag-- }
 
+                // prelim evaluation
                 if (scoreFlag < maxScore) return errors
 
                 val hashedPassword = BCrypt.hashpw(cfmPassword, BCrypt.gensalt())
@@ -76,7 +77,8 @@ data class User(val id: Int,
     constructor(resultRow: ResultRow) : this(
             id = resultRow[UserT.id],
             email = resultRow[UserT.email],
-            hashedPassword = resultRow[UserT.hashedPassword]
+            hashedPassword = resultRow[UserT.hashedPassword],
+            isVerified = resultRow[UserT.isVerified]
     )
 
     companion object {

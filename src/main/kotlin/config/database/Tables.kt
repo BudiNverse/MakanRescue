@@ -43,10 +43,11 @@ object PostSubT : Table("PostSubscription") {
     val createdAt = createdAt()
 }
 
-object LocationSubT : Table("LocationSubscription") {
+object LocationSubT : Table("Subscription") {
     val id = intId().autoIncrement().primaryKey()
     val locationId = intId("locationId") references LocationT.id
     val userId = intId("userId") references UserT.id
+    val createdAt = createdAt()
 }
 
 object CommentT : Table("Comment") {
@@ -54,6 +55,7 @@ object CommentT : Table("Comment") {
     val postId = intId("postId") references PostT.id
     val userId = intId("userId") references UserT.id
     val commentStr = varchar("commentStr", 255)
+    val createdAt = createdAt()
 }
 
 object ImageT : Table("Image") {
